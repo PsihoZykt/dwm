@@ -1,0 +1,35 @@
+
+Чувак сделал репозитории для всего саклесс-по где патчи включаются\выключаются по изменению 0 на 1 в конфиг файле. Из минусов - config.h раздут до невероятных размеров, включающий в себя настройку все патчей
+https://github.com/bakkeby/dwm-flexipatch/tree/master/patch
+
+Установлен патч keycodes, который позволяет работать хоткеям в русской расскладке. В связи с ним пришлось немного подкомментировать dwm.c, надеюсь ниче не сломалось
+
+/* Bar functionality */
+#include "bar_indicators.h"
+#include "bar_tagicons.h"
+
+#include "bar_alpha.h"
+#include "bar_dwmblocks.h"
+#include "bar_ltsymbol.h"
+#include "bar_status2d.h"
+#include "bar_statuscmd.h"
+#include "bar_tags.h"
+#include "bar_wintitle.h"
+
+/* Other patches */
+#include "restartsig.h"
+#include "swallow.h"
+#include "togglefullscreen.h"
+#include "vanitygaps.h"
+/* Layouts */
+#include "layout_fibonacci.h"
+#include "layout_monocle.h"
+#include "layout_tile.h"
+
+Так же удалил нахер tagmon и focusmon из хоткеев, у меня монитор один и мне это не нужно
+так же удалил все хоткеи связанные с vanitygaps, тоже не вижу нафиг они нужны
+из за двух строк выше компилятор ругается при сборке двма
+ну и удалил все бесполезные на мой взгляд хоткеи
+
+все хоткеи вынесены в отдельный файл hotkeys.c ( мб верну их обратно )
+для того чтобы хоткеи работали не зависимо от раскладки был создан файл keys.c, где номер кнопки биндится с моим кастомным ее названием. Эти названия используются в хоткеях
