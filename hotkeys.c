@@ -6,7 +6,7 @@ static Key keys[] = {
   {MODKEY|ShiftMask,    N,             spawn,             SHCMD(TERM " -e nvim -c VimwikiMakeDiaryNote") },
   { MODKEY,             N,             spawn,             SHCMD(TERM " -e nvim -c VimwikiIndex") },
   { MODKEY,             R,             spawn,             SHCMD(TERM " -e ranger") },
-	{ 0 ,                 Caps_lock,     spawn,             SHCMD("change-layout")},
+	{ MODKEY ,                 Caps_lock,     spawn,             SHCMD("change-layout")},
 	{ MODKEY,             Q,             killclient,        {0} }, // Kill client
 	{ MODKEY,             Backspace,     spawn,             SHCMD("sysact") },
 	{ MODKEY,             W,             spawn,             SHCMD("$BROWSER") },
@@ -17,14 +17,15 @@ static Key keys[] = {
   { MODKEY,             F3,            spawn,             SHCMD("brightnesscontrol up") },
   { MODKEY,             M,             spawn,             SHCMD(TERM " -e ncmpcpp") },
   { MODKEY|ShiftMask,   M,             spawn,             SHCMD(TERM " -e curseradio") },
-  { MODKEY,             F10,           spawn,             SHCMD("mpc toggle") },
-  { MODKEY|ShiftMask,   F10,           spawn,             SHCMD("mpvtoggle") },
-  { MODKEY,             Comma,         spawn,             SHCMD("mpc seek -10") }, // 10 sec before
-  { MODKEY|ShiftMask,   Comma,         spawn,             SHCMD("mpc seek -60") },
-  { MODKEY,             Period,        spawn,             SHCMD("mpc seek +10") }, // 10 sec after
-  { MODKEY|ShiftMask,   Period,        spawn,             SHCMD("mpc seek +60") },
-  { MODKEY,             F9,            spawn,             SHCMD("mpc prev") },
-  { MODKEY,             F11,           spawn,             SHCMD("mpc next") },
+  { MODKEY,             F12,           spawn,             SHCMD("mpvStop") },
+  { MODKEY|ShiftMask,   F12,          spawn,              SHCMD("mpvToggle") },
+  { MODKEY,             Comma,         spawn,             SHCMD("mpcControl seek -10") }, // 10 sec before
+  { MODKEY|ShiftMask,   Comma,         spawn,             SHCMD("mpcControl seek -60") },
+  { MODKEY,             Period,        spawn,             SHCMD("mpcControl seek +10") }, // 10 sec after
+  { MODKEY|ShiftMask,   Period,        spawn,             SHCMD("mpcControl seek +60") },
+  { MODKEY,             F9,            spawn,             SHCMD("mpcControl prev") },
+  { MODKEY,             F10,           spawn,             SHCMD("mpcControl toggle") },
+  { MODKEY,             F11,           spawn,             SHCMD("mpcControl next") },
   { MODKEY,             KP_0,          spawn,             SHCMD(TERM " -e newsboat") }, // Rss feeder
   { MODKEY|ShiftMask,   KP_1,          spawn,             SHCMD(TERM " -e castero") },
 	{ MODKEY,             Space,         zoom,              {0} }, // Make selected window master
