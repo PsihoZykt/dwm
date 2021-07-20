@@ -53,7 +53,8 @@ const int M                = 58;
 const int Comma            = 59;
 const int Period           = 60;
 const int Slash            = 61;
-
+const int Alt              = 64;
+const int Alt_R            = 108;
 const int Left             = 113;
 const int Right            = 114;
 const int Page_up          = 112;

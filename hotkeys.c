@@ -4,9 +4,10 @@
 static Key keys[] = {
 	/* modifier           key            function                argument */
   {MODKEY|ShiftMask,    N,             spawn,             SHCMD(TERM " -e nvim -c VimwikiMakeDiaryNote") },
+  {MODKEY,              V,             spawn,             SHCMD(TERM " -e nvim -c 'Telescope oldfiles'") },
   { MODKEY,             N,             spawn,             SHCMD(TERM " -e nvim -c VimwikiIndex") },
   { MODKEY,             R,             spawn,             SHCMD(TERM " -e ranger") },
-	{ MODKEY ,                 Caps_lock,     spawn,             SHCMD("change-layout")},
+	{ 0 ,            Alt_R,     spawn,             SHCMD("change-layout")},
 	{ MODKEY,             Q,             killclient,        {0} }, // Kill client
 	{ MODKEY,             Backspace,     spawn,             SHCMD("sysact") },
 	{ MODKEY,             W,             spawn,             SHCMD("$BROWSER") },
