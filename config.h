@@ -1,6 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 // Constants
 #define TERM "st"
+/* This defines the name of the executable that handles the bar (used for signalling purposes) */
+#define STATUSBAR "dwmblocks"
 
 /* appearance */
 static const unsigned int borderpx       = 2;   /* border pixel of windows */
@@ -20,14 +22,21 @@ static const int sidepad                 = 5;  /* horizontal padding of bar */
 static int tagindicatortype              = INDICATOR_TOP_LEFT_SQUARE;
 static int tiledindicatortype            = INDICATOR_NONE;
 static int floatindicatortype            = INDICATOR_TOP_LEFT_SQUARE;
+
+/* Layouts */
+static const float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
+static const int nmaster     = 1;    /* number of clients in master area */
+static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+
+/* Fonts */
 static const char *fonts[]     = {
   "CaskaydiaCove Nerd Font Mono:size=10:antialias=true:autohint=true", 
    "JoyPixels:pixelsize=12:antialias=true:autohint=true"
 						     	};
 static const char dmenufont[]            =  "FiraCode Nerd Font:size=14:antialias=true:autohint=true";
 
+/* Colors */
 static char c000000[]                    = "#000000"; // placeholder value
-
 
 
 static char normfgcolor[]                = "#f8f8f2"; // Right panel text color
@@ -85,7 +94,7 @@ static const unsigned int alphas[][3] = {
 	[SchemeHidSel]       = { OPAQUE, baralpha, borderalpha },
 	[SchemeUrg]          = { OPAQUE, baralpha, borderalpha },
 };
-#define NUMCOLORS         4
+// #define NUMCOLORS         4
 
  static char *colors[][ColCount] = {	
 /*                       fg                bg                border                float */
@@ -104,92 +113,22 @@ static const unsigned int alphas[][3] = {
 
 
 
-
-/* Tags
- * In a traditional dwm the number of tags in use can be changed simply by changing the number
- * of strings in the tags array. This build does things a bit different which has some added
- * benefits. If you need to change the number of tags here then change the NUMTAGS macro in dwm.c.
- *
- * Examples:
- *
- *  1) static char *tagicons[][NUMTAGS*2] = {
- *         [DEFAULT_TAGS] = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I" },
- *     }
- *
- *  2) static char *tagicons[][1] = {
- *         [DEFAULT_TAGS] = { "•" },
- *     }
- *
- * The first example would result in the tags on the first monitor to be 1 through 9, while the
- * tags for the second monitor would be named A through I. A third monitor would start again at
- * 1 through 9 while the tags on a fourth monitor would also be named A through I. Note the tags
- * count of NUMTAGS*2 in the array initialiser which defines how many tag text / icon exists in
- * the array. This can be changed to *3 to add separate icons for a third monitor.
- *
- * For the second example each tag would be represented as a bullet point. Both cases work the
- * same from a technical standpoint - the icon index is derived from the tag index and the monitor
- * index. If the icon index is is greater than the number of tag icons then it will wrap around
- * until it an icon matches. Similarly if there are two tag icons then it would alternate between
- * them. This works seamlessly with alternative tags and alttagsdecoration patches.
- */
+/* TAGS */
 static char *tagicons[][NUMTAGS] = {
 	[DEFAULT_TAGS]        = { "1", "2", "3", "4", "5", "6", "7", "8", "9" },
 	[ALTERNATIVE_TAGS]    = { "A", "B", "C", "D", "E", "F", "G", "H", "I" },
 	[ALT_TAGS_DECORATION] = { "<1>", "<2>", "<3>", "<4>", "<5>", "<6>", "<7>", "<8>", "<9>" },
 };
 
-
-/* There are two options when it comes to per-client rules:
- *  - a typical struct table or
- *  - using the RULE macro
- *
- * A traditional struct table looks like this:
- *    // class      instance  title  wintype  tags mask  isfloating  monitor
-    { "Gimp",     NULL,     NULL,  NULL,    1 << 4,    0,          -1 },
-*    { "Firefox",  NULL,     NULL,  NULL,    1 << 7,    0,          -1 },
-*
- * The RULE macro has the default values set for each field allowing you to only
- * specify the values that are relevant for your rule, e.g.
- *
- *    RULE(.class = "Gimp", .tags = 1 << 4)
- *    RULE(.class = "Firefox", .tags = 1 << 7)
- *
- * Refer to the Rule struct definition for the list of available fields depending on
- * the patches you enable.
- */
+/* RULES */
 static const Rule rules[] = {
-	/* xprop(1):
-	 *	WM_CLASS(STRING) = instance, class
-	 *	WM_NAME(STRING) = title
-	 *	WM_WINDOW_ROLE(STRING) = role
-	 *	_NET_WM_WINDOW_TYPE(ATOM) = wintype
-	 */
     // class      instance  title  wintype  tags mask  isfloating  monitor
     { "Gimp",     NULL,     NULL,  NULL,    1 << 4,    0,          -1 },
     { NULL,       NULL,     "curseradio",  NULL,    1 << 8,    0,          -1 },
     { NULL,       NULL,     "castero",  NULL,    1 << 7,    0,          -1 },
-//	RULE(.wintype = WTYPE "DIALOG", .isfloating = 1)
-//	RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
-//	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
-//	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
-//	RULE(.class = "Gimp", .tags = 1 << 4)
-//	RULE(.class = "Firefox", .tags = 1 << 7)
 };
 
 
-
-/* Bar rules allow you to configure what is shown where on the bar, as well as
- * introducing your own bar modules.
- *
- *    monitor:
- *      -1  show on all monitors
- *       0  show on monitor 0
- *      'A' show on active monitor (i.e. focused / selected) (or just -1 for active?)
- *    bar - bar index, 0 is default, 1 is extrabar
- *    alignment - how the module is aligned compared to other modules
- *    widthfunc, drawfunc, clickfunc - providing bar module width, draw and click functions
- *    name - does nothing, intended for visual clue and for logging / debugging
- */
 static const BarRule barrules[] = {
 	/* monitor  bar    alignment         widthfunc                drawfunc                clickfunc                name */
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,          draw_ltsymbol,          click_ltsymbol,          "layout" },
@@ -199,11 +138,6 @@ static const BarRule barrules[] = {
 };
 
 /* layout(s) */
-static const float mfact     = 0.50; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
-
-
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -229,7 +163,7 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+static char dmenumon[2] = "0";  /* component of dmenucmd, manipulated in spawn()  */
 static const char *dmenucmd[] = {
 	"dmenu_run",
 	"-m", dmenumon,
@@ -242,12 +176,69 @@ static const char *dmenucmd[] = {
 };
 static const char *termcmd[]  = { TERM, "-e", "fish" };
 
-/* This defines the name of the executable that handles the bar (used for signalling purposes) */
-#define STATUSBAR "dwmblocks"
 
-
-#include "hotkeys.c"
-
+/* SHORTCUTS */
+#include "keys.c"
+/* Keys changed due to in XK_* way, my hotkeys doesn't work with russion layout */
+static Key keys[] = {
+	/* modifier           key            function                argument */
+  {MODKEY|ShiftMask,    N,             spawn,             SHCMD(TERM " -e nvim -c VimwikiMakeDiaryNote") },
+  {MODKEY,              V,             spawn,             SHCMD(TERM " -e nvim -c 'Telescope oldfiles'") },
+  { MODKEY,             N,             spawn,             SHCMD(TERM " -e nvim -c VimwikiIndex") },
+  { MODKEY,             R,             spawn,             SHCMD(TERM " -e ranger") },
+	{ 0 ,            Alt_R,     spawn,             SHCMD("change-layout")},
+	{ MODKEY,             Q,             killclient,        {0} }, // Kill client
+	{ MODKEY,             Backspace,     spawn,             SHCMD("sysact") },
+	{ MODKEY,             W,             spawn,             SHCMD("$BROWSER") },
+  { MODKEY,             F6,            spawn,             SHCMD("volumecontrol mute") },
+  { MODKEY,             F7,            spawn,             SHCMD("volumecontrol down") },
+  { MODKEY,             F8,            spawn,             SHCMD("volumecontrol up") },
+  { MODKEY,             F2,            spawn,             SHCMD("brightnesscontrol down") },
+  { MODKEY,             F3,            spawn,             SHCMD("brightnesscontrol up") },
+  { MODKEY,             M,             spawn,             SHCMD(TERM " -e ncmpcpp") },
+  { MODKEY|ShiftMask,   M,             spawn,             SHCMD(TERM " -e curseradio") },
+  { MODKEY,             F12,           spawn,             SHCMD("mpvStop") },
+  { MODKEY|ShiftMask,   F12,          spawn,              SHCMD("mpvToggle") },
+  { MODKEY,             Comma,         spawn,             SHCMD("mpcControl seek -10") }, // 10 sec before
+  { MODKEY|ShiftMask,   Comma,         spawn,             SHCMD("mpcControl seek -60") },
+  { MODKEY,             Period,        spawn,             SHCMD("mpcControl seek +10") }, // 10 sec after
+  { MODKEY|ShiftMask,   Period,        spawn,             SHCMD("mpcControl seek +60") },
+  { MODKEY,             F9,            spawn,             SHCMD("mpcControl prev") },
+  { MODKEY,             F10,           spawn,             SHCMD("mpcControl toggle") },
+  { MODKEY,             F11,           spawn,             SHCMD("mpcControl next") },
+  { MODKEY,             KP_0,          spawn,             SHCMD(TERM " -e newsboat") }, // Rss feeder
+  { MODKEY|ShiftMask,   KP_1,          spawn,             SHCMD(TERM " -e castero") },
+	{ MODKEY,             Space,         zoom,              {0} }, // Make selected window master
+	{ MODKEY,             D,             spawn,             SHCMD("rofi_drun") },
+	{ MODKEY,             Return,        spawn,             {.v = termcmd } }, // Run terminal
+	{ MODKEY,             B,             togglebar,         {0} }, // Toggle bar
+	{ MODKEY,             J,             focusstack,        {.i = +1 } }, // Change focus on next window
+	{ MODKEY,             K,             focusstack,        {.i = -1 } }, // Change focus on prev window
+  { MODKEY,             Bracket_left,  incnmaster,        {.i = +1 } }, // Inc amount master windows
+	{ MODKEY,             Bracket_right, incnmaster,        {.i = -1 } }, // Dec amount master windows
+	{ MODKEY,             H,             setmfact,          {.f = -0.05} }, // Inc width of master window
+	{ MODKEY,             L,             setmfact,          {.f = +0.05} }, // Dec width of master window
+	{ MODKEY,             Zero,          togglegaps,        {0} }, // Enabl//disable gaps
+	{ MODKEY,             Tab,           view,              {0} }, // Change to the prev tab
+	{ MODKEY,             T,             setlayout,         {.v = &layouts[0]} }, // Default layout (Master to the left, other to the right in rows )
+	{ MODKEY,             Z,             setlayout,         {.v = &layouts[3]} }, // Fibonacci layout
+	{ MODKEY|ShiftMask,   Space,         togglefloating,    {0} }, //Toggle floating window
+	{ MODKEY,             F,             togglefullscreen,  {0} }, //Toggle fullscreen
+	{ 0,                  Print,         spawn,             SHCMD("maimpick")}, // Take a screenshot
+  { MODKEY,			        Print,	       spawn,		          SHCMD("dmenurecord") }, // Record a video
+	{ MODKEY|ShiftMask,	  Print,	       spawn,		          SHCMD("dmenurecord kill") }, // Stop recording video
+	{ MODKEY,			        Delete,	       spawn,		          SHCMD("dmenurecord kill") }, // Stop recording video
+  // Tags
+	TAGKEYS(One,    0)
+	TAGKEYS(Two,    1)
+	TAGKEYS(Three,  2)
+	TAGKEYS(Four,   3)
+	TAGKEYS(Five,   4)
+	TAGKEYS(Six,    5)
+	TAGKEYS(Seven,  6)
+	TAGKEYS(Eight,  7)
+	TAGKEYS(Nine,   8)
+};
 /* button definitions */
 /* click can be ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle, ClkClientWin, or ClkRootWin */
 static Button buttons[] = {
