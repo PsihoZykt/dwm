@@ -5,7 +5,7 @@
 #define STATUSBAR "dwmblocks"
 
 /* appearance */
-static const unsigned int borderpx       = 2;   /* border pixel of windows */
+static const unsigned int borderpx       = 3;   /* border pixel of windows */
 static const unsigned int snap           = 32;  /* snap pixel */
 static const int swallowfloating         = 1;   /* 1 means swallow floating windows by default */
 static const unsigned int gappih         = 5;  /* horiz inner gap between windows */
@@ -46,7 +46,7 @@ static char normfloatcolor[]             = "#282a36"; // ???
 
 static char selfgcolor[]                 = "#f8f8f2"; // Left panel text color ( tabs )
 static char selbgcolor[]                 = "#282a36"; // Left Panel bf color
-static char selbordercolor[]             = "#4c3f64" ; // WIndow border color
+static char selbordercolor[]             = "#ff79c6" ; // WIndow border color
 static char selfloatcolor[]              = "#282a36"; // ??
 
 static char titlenormfgcolor[]           = "#f9f9f2"; // ??
