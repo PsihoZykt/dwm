@@ -124,6 +124,7 @@ static char *tagicons[][NUMTAGS] = {
 static const Rule rules[] = {
     // class      instance  title  wintype  tags mask  isfloating  monitor
     { "Gimp",     NULL,     NULL,  NULL,    1 << 4,    0,          -1 },
+		{  "St", 			NULL, 		NULL,  NULL,     0,        0, 1, 0, -1},
     { NULL,       NULL,     "curseradio",  NULL,    1 << 8,    0,          -1 },
     { NULL,       NULL,     "castero",  NULL,    1 << 7,    0,          -1 },
 };
