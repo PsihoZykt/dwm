@@ -7,7 +7,7 @@
 /* appearance */
 static const unsigned int borderpx       = 1;   /* border pixel of windows */
 static const unsigned int snap           = 32;  /* snap pixel */
-static const int swallowfloating         = 1;   /* 1 means swallow floating windows by default */
+static const int swallowfloating         = 0;   /* 1 means swallow floating windows by default */
 static const unsigned int gappih         = 5;  /* horiz inner gap between windows */
 static const unsigned int gappiv         = 5;  /* vert inner gap between windows */
 static const unsigned int gappoh         = 5;  /* horiz outer gap between windows and screen edge */
@@ -122,14 +122,13 @@ static char *tagicons[][NUMTAGS] = {
 
 /* RULES */
 static const Rule rules[] = {
-    // class      instance  title  wintype  tags mask  isfloating  monitor
-    { "Gimp",     NULL,     NULL,  NULL,    1 << 4,    0,          -1 },
-		{  "St", 			NULL, 		NULL,  NULL,     0,        0, 1, 0, -1},
-    { NULL,       NULL,     "curseradio",  NULL,    1 << 8,    0,          -1 },
-    { NULL,       NULL,     "castero",  NULL,    1 << 7,    0,          -1 },
-};
-
-
+RULE(.class = "st", .isterminal = 1)
+RULE(.wintype = WTYPE "DIALOG", .isfloating = 1)
+RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
+RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
+RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
+RULE(.class = "gimp", .isfloating = 1)
+					};
 static const BarRule barrules[] = {
 	/* monitor  bar    alignment         widthfunc                drawfunc                clickfunc                name */
 	{ -1,       0,     BAR_ALIGN_LEFT,   width_ltsymbol,          draw_ltsymbol,          click_ltsymbol,          "layout" },
