@@ -127,7 +127,7 @@ RULE(.wintype = WTYPE "DIALOG", .isfloating = 1)
 RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
 RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
 RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
-RULE(.class = "gimp", .isfloating = 1)
+RULE(.class = "Zathura", .noswallow = 1)
 					};
 static const BarRule barrules[] = {
 	/* monitor  bar    alignment         widthfunc                drawfunc                clickfunc                name */
