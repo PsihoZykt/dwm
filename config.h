@@ -191,6 +191,7 @@ static Key keys[] = {
 	{ MODKEY,             Q,             killclient,        {0} }, // Kill client
 	{ MODKEY,             Backspace,     spawn,             SHCMD("sysact") },
 	{ MODKEY,             W,             spawn,             SHCMD("$BROWSER") },
+  { MODKEY,             F1,            spawn,             SHCMD("dmenucheatsheet") },
   { MODKEY,             F6,            spawn,             SHCMD("volumecontrol mute") },
   { MODKEY,             F7,            spawn,             SHCMD("volumecontrol down") },
   { MODKEY,             F8,            spawn,             SHCMD("volumecontrol up") },
